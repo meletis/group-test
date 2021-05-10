@@ -4,8 +4,6 @@ import test.hierarchy.GroupModel;
 import test.hierarchy.dao.GroupDao;
 import test.hierarchy.domain.Group;
 
-import java.util.List;
-
 public class GroupServiceImpl implements GroupService {
 
     /**
@@ -13,13 +11,9 @@ public class GroupServiceImpl implements GroupService {
      */
     private final GroupModel cachedGroupModel = new GroupModel();
 
-    private GroupDao groupDao;
+    private final GroupDao groupDao;
 
-    public GroupDao getGroupDao() {
-        return groupDao;
-    }
-
-    public void setGroupDao(GroupDao groupDao) {
+    public GroupServiceImpl(GroupDao groupDao) {
         this.groupDao = groupDao;
     }
 
@@ -29,12 +23,8 @@ public class GroupServiceImpl implements GroupService {
             return null;
         }
 
-//        // Using the cache
-//        GroupModel groupModel = getGroupModel();
-//        return groupModel.getById(groupId);
-
         // Using the database
-        return getGroupDao().getGroupById(groupId);
+        return groupDao.getGroupById(groupId);
     }
 
     @Override
@@ -48,19 +38,13 @@ public class GroupServiceImpl implements GroupService {
         // TODO: Consider a solution that doesn't involve any cache
 
         // then we need to find the top-level group that contains that group.
-        GroupModel groupModel = getGroupModel();
-        return groupModel.findTopLevelGroupId(groupId);
-    }
 
-    protected GroupModel getGroupModel() {
-        synchronized (this) {
-            if (cachedGroupModel.isEmpty()) {
-                // TODO: consider moving this slow operation outside the synchronized block.
-                List<Group> groups = getGroupDao().getAllGroups();
-                cachedGroupModel.cache(groups);
-            }
+        try {
+            return groupDao.getGroupById(groupId).getTopLevelId();
+        }catch (Exception e) {
+            //Log exception
+            return null;
         }
-
-        return cachedGroupModel;
     }
+
 }

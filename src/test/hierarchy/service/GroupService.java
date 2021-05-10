@@ -16,7 +16,7 @@ public interface GroupService {
      * Returns the ID of the top-level parent of the group with the given {@code groupId}.
      *
      * @param groupId the group ID of the child group.
-     * @return an ID that belongs to a top-level group, or null if none found.
+     * @return when it's already at the top level will return the same group id. In case it's root it'll return null.
      */
     Integer getTopLevelGroupId(Integer groupId);
 }
