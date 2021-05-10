@@ -45,4 +45,4 @@ So, we need to make any necessary changes to eliminate the need of the cache. Su
 
 The while loop in the "findTopLevelGroupId"method located in GroupModel.java file can make the heap space explode as there is an unknown number of levels beyond second level. Adding a "top_level_id" field in the database schema can serve as an alternative for that while loop because for every group we can store the top_level_id here.
 
-We can use a recursive CTE(common table expression) to get the value of the  top_level_id field
+We can use a recursive CTE(common table expression) or a self-join to get the value of the  top_level_id field
