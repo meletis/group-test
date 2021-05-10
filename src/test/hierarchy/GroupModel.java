@@ -43,6 +43,12 @@ public class GroupModel {
     }
 
     // otherwise it is a common folder deeper.
+
+    //This while loop can make the heap space explode as we are dealing with unlimited levels.
+    
+    /*An alternative for this is to add a top_level_id field in the database schema so for every child reference we can have an immediate parent reference
+     and there is no need to move through the entire tree*/
+
     while (true) {
       Group parent = groupMap.get(parentGroupId);
       if (groupMap.get(parent.getParentId()).getParentId() == null) {
