@@ -14,11 +14,13 @@ CREATE TABLE `__GROUP`
   `id`       int(11) NOT NULL AUTO_INCREMENT,
   `name`     varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `parentId` int(11)                              DEFAULT NULL,
+  `topLevelId` int(11)                            DEFAULT NULL,
   
   PRIMARY KEY (`id`),
   UNIQUE KEY `IDX_GROUP_TITLE` (`name`),
   KEY `IDX_PARENT_ID` (`parentId`),
-  CONSTRAINT `fk_groups_group_id` FOREIGN KEY (`parentId`) REFERENCES `__GROUP` (`id`)
+  CONSTRAINT `fk_groups_group_id` FOREIGN KEY (`parentId`) REFERENCES `__GROUP` (`id`),
+  FOREIGN KEY (`topLevelId`) REFERENCES `__GROUP` (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8
   COLLATE = utf8_unicode_ci
@@ -40,3 +42,11 @@ So, we need to make any necessary changes to eliminate the need of the cache. Su
 
 1. Changes in the database structure
 2. Changes in the Java code
+
+## Run
+This is an in memory version. You can:
+
+```bash
+javac -cp ./src/ -d build src/test/hierarchy/Application.java
+java -cp ./build/ test.hierarchy.Application
+```
